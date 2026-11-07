@@ -1,7 +1,9 @@
-﻿build/
-DerivedData/
+﻿@"
+/build/
+/DerivedData/
 xcuserdata/
 *.xcuserstate
 *.ipa
 *_BurstDebugInformation_DoNotShip/
 .DS_Store
+"@ | Set-Content -Encoding ascii .gitignore
