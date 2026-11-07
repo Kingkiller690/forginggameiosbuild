@@ -1,0 +1,95 @@
+﻿#include "pch-c.h"
+
+
+#include "codegen/il2cpp-codegen-metadata.h"
+
+
+extern const RuntimeMethod* ATTrackingStatusBinding_AppTransparencyTrackingRequestCompleted_mB11B365276B232CCAF8651989E5FAC926FC42641_RuntimeMethod_var;
+
+
+
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mEA9B182157E0A106767030AA8006881131FA7A65 (void);
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_m729E7BE97E69C51E215A2D61FBB916104E5BF395 (void);
+extern void ATTrackingStatusBinding_InterfaceTrackingAuthorizationRequest_m30AE9A7B556DFA8EB3CFADA6F19A52351163DF18 (void);
+extern void ATTrackingStatusBinding_InterfaceGetTrackingAuthorizationStatus_m5BA14B6630FE5730137A92B51E99BEE1AA95DFD7 (void);
+extern void ATTrackingStatusBinding_RequestAuthorizationTracking_mCBF4621552E7D027AFB9161BA356A0D2E8CC311D (void);
+extern void ATTrackingStatusBinding_RequestAuthorizationTracking_mFA354A0FAC4B275F2084ED22F8B88EC50A90574A (void);
+extern void ATTrackingStatusBinding_GetAuthorizationTrackingStatus_m84A7C0033255D8E6F420D7F6BC8ED20246A5B577 (void);
+extern void ATTrackingStatusBinding_AppTransparencyTrackingRequestCompleted_mB11B365276B232CCAF8651989E5FAC926FC42641 (void);
+extern void ATTrackingStatusBinding__ctor_m767E413B3FFB891F62339EE9CBB1505D655CA929 (void);
+extern void RequestAuthorizationTrackingCompleteHandler__ctor_m39D4213EE82B8CC870BD57882FDD37B0E220C6A9 (void);
+extern void RequestAuthorizationTrackingCompleteHandler_Invoke_m8991FE043CEC3E5680A01AD4725834B7FA94A0C4 (void);
+extern void RequestAuthorizationTrackingCompleteHandler_BeginInvoke_m0351C530152858AC11757F5A57EEA2BF3281D0BF (void);
+extern void RequestAuthorizationTrackingCompleteHandler_EndInvoke_m9A077BF14E950E011C45E794E3284288141E2A3B (void);
+extern void SkAdNetworkBinding_InterfaceSkAdNetworkUpdateConversionValue_mA03B167B8D20C404EABC27714742DB53724ADDF6 (void);
+extern void SkAdNetworkBinding_InterfaceSkAdNetworkRegisterAppForNetworkAttribution_m86777929E93B6BB093F10CD3D9927BB9272159EE (void);
+extern void SkAdNetworkBinding_SkAdNetworkUpdateConversionValue_m9CCE8AAC1ADF4DDE7D441CC12E232744FB580EA7 (void);
+extern void SkAdNetworkBinding_SkAdNetworkRegisterAppForNetworkAttribution_mBB5C808D1A417EDF075E24C574C7B3F70EAEC03A (void);
+extern void SkAdNetworkBinding__ctor_mCBFF5A21A0C6749663BBD06AF254E5CE3ED84BAB (void);
+static Il2CppMethodPointer s_methodPointers[18] = 
+{
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mEA9B182157E0A106767030AA8006881131FA7A65,
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_m729E7BE97E69C51E215A2D61FBB916104E5BF395,
+	ATTrackingStatusBinding_InterfaceTrackingAuthorizationRequest_m30AE9A7B556DFA8EB3CFADA6F19A52351163DF18,
+	ATTrackingStatusBinding_InterfaceGetTrackingAuthorizationStatus_m5BA14B6630FE5730137A92B51E99BEE1AA95DFD7,
+	ATTrackingStatusBinding_RequestAuthorizationTracking_mCBF4621552E7D027AFB9161BA356A0D2E8CC311D,
+	ATTrackingStatusBinding_RequestAuthorizationTracking_mFA354A0FAC4B275F2084ED22F8B88EC50A90574A,
+	ATTrackingStatusBinding_GetAuthorizationTrackingStatus_m84A7C0033255D8E6F420D7F6BC8ED20246A5B577,
+	ATTrackingStatusBinding_AppTransparencyTrackingRequestCompleted_mB11B365276B232CCAF8651989E5FAC926FC42641,
+	ATTrackingStatusBinding__ctor_m767E413B3FFB891F62339EE9CBB1505D655CA929,
+	RequestAuthorizationTrackingCompleteHandler__ctor_m39D4213EE82B8CC870BD57882FDD37B0E220C6A9,
+	RequestAuthorizationTrackingCompleteHandler_Invoke_m8991FE043CEC3E5680A01AD4725834B7FA94A0C4,
+	RequestAuthorizationTrackingCompleteHandler_BeginInvoke_m0351C530152858AC11757F5A57EEA2BF3281D0BF,
+	RequestAuthorizationTrackingCompleteHandler_EndInvoke_m9A077BF14E950E011C45E794E3284288141E2A3B,
+	SkAdNetworkBinding_InterfaceSkAdNetworkUpdateConversionValue_mA03B167B8D20C404EABC27714742DB53724ADDF6,
+	SkAdNetworkBinding_InterfaceSkAdNetworkRegisterAppForNetworkAttribution_m86777929E93B6BB093F10CD3D9927BB9272159EE,
+	SkAdNetworkBinding_SkAdNetworkUpdateConversionValue_m9CCE8AAC1ADF4DDE7D441CC12E232744FB580EA7,
+	SkAdNetworkBinding_SkAdNetworkRegisterAppForNetworkAttribution_mBB5C808D1A417EDF075E24C574C7B3F70EAEC03A,
+	SkAdNetworkBinding__ctor_mCBFF5A21A0C6749663BBD06AF254E5CE3ED84BAB,
+};
+static const int32_t s_InvokerIndices[18] = 
+{
+	30061,
+	17113,
+	28544,
+	29922,
+	30031,
+	28544,
+	29922,
+	28539,
+	17113,
+	6679,
+	13020,
+	2708,
+	13087,
+	28539,
+	30031,
+	28539,
+	30031,
+	17113,
+};
+static const Il2CppTokenIndexMethodTuple s_reversePInvokeIndices[1] = 
+{
+	{ 0x06000008, 0,  (void**)&ATTrackingStatusBinding_AppTransparencyTrackingRequestCompleted_mB11B365276B232CCAF8651989E5FAC926FC42641_RuntimeMethod_var, 0 },
+};
+IL2CPP_EXTERN_C const Il2CppCodeGenModule g_Unity_Advertisement_IosSupport_CodeGenModule;
+const Il2CppCodeGenModule g_Unity_Advertisement_IosSupport_CodeGenModule = 
+{
+	"Unity.Advertisement.IosSupport.dll",
+	18,
+	s_methodPointers,
+	0,
+	NULL,
+	s_InvokerIndices,
+	1,
+	s_reversePInvokeIndices,
+	0,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};
