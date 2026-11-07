@@ -1,36 +1,85 @@
-name: iOS Build
+name: iOS Build (unsigned IPA for Sideloadly)
+
 on:
-  push: { branches: [main] }
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  unity-export:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { lfs: true }
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-iOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: Library-iOS-
-      - uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: iOS
-      - uses: actions/upload-artifact@v4
-        with:
-          name: xcode-project
-          path: build/iOS
-
-  xcode-build:
-    needs: unity-export
+  build-ios:
     runs-on: macos-latest
+    timeout-minutes: 120
+
     steps:
-      - uses: actions/download-artifact@v4
-        with: { name: xcode-project, path: build/iOS }
-      # Sign, archive, and upload to TestFlight here — fastlane or
-      # rageagainstthepixel/unity-xcode-builder (see below)
+      # ---------- Get the code + LFS files (cached so you don't burn LFS bandwidth) ----------
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: List LFS files for cache key
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Download LFS files
+        run: |
+          git lfs pull
+          # Stop right here if the big Unity library is still a tiny pointer file
+          if head -c 100 Libraries/libiPhone-lib.a | grep -q "git-lfs.github.com"; then
+            echo "::error::Libraries/libiPhone-lib.a is still an LFS pointer - LFS download failed"
+            exit 1
+          fi
+          ls -lh Libraries/*.a
+
+      # ---------- CocoaPods (your project uses IronSource / LevelPlay pods) ----------
+      - name: Install CocoaPods dependencies
+        run: |
+          # The old GitHub Specs repo is huge and slow to clone; the CDN source is enough
+          sed -i '' '/github.com\/CocoaPods\/Specs/d' Podfile
+          pod install --repo-update
+          ls -d Unity-iPhone.xcworkspace
+
+      # ---------- Build the app without signing (Sideloadly signs it for you) ----------
+      - name: Build app (unsigned)
+        run: |
+          xcodebuild \
+            -workspace Unity-iPhone.xcworkspace \
+            -scheme Unity-iPhone \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            -quiet \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      # ---------- Package into a proper IPA and sanity-check it ----------
+      - name: Package IPA
+        run: |
+          APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -n 1)
+          echo "Built app: $APP"
+
+          test -n "$APP" || { echo "::error::No .app was produced"; exit 1; }
+          test -f "$APP/Info.plist" || { echo "::error::Info.plist missing from $APP"; exit 1; }
+          test -d "$APP/Frameworks/UnityFramework.framework" || { echo "::error::UnityFramework.framework missing from $APP"; exit 1; }
+
+          rm -rf Payload && mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry ForgingIncremental.ipa Payload
+
+          ls -lh ForgingIncremental.ipa
+          unzip -l ForgingIncremental.ipa | head -n 15
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ForgingIncremental-ipa
+          path: ForgingIncremental.ipa
+          compression-level: 0
+          retention-days: 7
