@@ -35,6 +35,16 @@ jobs:
           fi
           ls -lh Libraries/*.a
 
+      - name: Check IL2CPP compiler is in the repo
+        run: |
+          IL2CPP_DIR="Il2CppOutputProject/IL2CPP/build/deploy_$(uname -m)"
+          if [ ! -f "$IL2CPP_DIR/il2cpp" ]; then
+            echo "::error::$IL2CPP_DIR/il2cpp is missing - commit the Il2CppOutputProject/IL2CPP/build folder"
+            ls Il2CppOutputProject/IL2CPP/build 2>/dev/null || echo "(build folder not in repo at all)"
+            exit 1
+          fi
+          ls -lh "$IL2CPP_DIR"
+
       # ---------- CocoaPods (your project uses IronSource / LevelPlay pods) ----------
       - name: Install CocoaPods dependencies
         run: |
