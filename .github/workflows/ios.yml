@@ -1,59 +1,36 @@
-# Builds a Unity-exported Xcode project on a GitHub-hosted Mac
-# and produces an UNSIGNED .ipa you can sign/install with Sideloadly.
-#
-# Put this file in your repo at:  .github/workflows/ios-build.yml
-# The Unity Xcode export (the folder containing Unity-iPhone.xcodeproj)
-# should be the root of the repo.
-
-name: iOS build
-
+name: iOS Build
 on:
-  workflow_dispatch:   # run manually from the Actions tab
+  push: { branches: [main] }
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: macos-15
-    timeout-minutes: 60
-
+  unity-export:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out project
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { lfs: true }
+      - uses: actions/cache@v4
         with:
-          lfs: true   # Unity's libiPhone-lib.a is usually >100 MB, so it must be in Git LFS
-
-      - name: Install CocoaPods (only if the project uses them)
-        run: |
-          if [ -f Podfile ]; then
-            pod install --repo-update
-          fi
-
-      - name: Build app (no code signing)
-        run: |
-          if [ -d Unity-iPhone.xcworkspace ]; then
-            TARGET="-workspace Unity-iPhone.xcworkspace"
-          else
-            TARGET="-project Unity-iPhone.xcodeproj"
-          fi
-          xcodebuild $TARGET \
-            -scheme Unity-iPhone \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build | tail -n 200
-
-      - name: Package unsigned .ipa
-        run: |
-          mkdir -p Payload
-          cp -R build/Build/Products/Release-iphoneos/*.app Payload/
-          zip -qry unsigned.ipa Payload
-          ls -lh unsigned.ipa
-
-      - name: Upload .ipa
-        uses: actions/upload-artifact@v4
+          path: Library
+          key: Library-iOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-iOS-
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          name: unsigned-ipa
-          path: unsigned.ipa
+          targetPlatform: iOS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xcode-project
+          path: build/iOS
+
+  xcode-build:
+    needs: unity-export
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: xcode-project, path: build/iOS }
+      # Sign, archive, and upload to TestFlight here — fastlane or
+      # rageagainstthepixel/unity-xcode-builder (see below)
